@@ -24,6 +24,11 @@ public class DigraphMatrix extends AbstractGraph
         initializeAdjacencyMatrix();
     }
 
+    public DigraphMatrix() {
+        super();
+        initializeAdjacencyMatrix();
+    }
+
     private void initializeAdjacencyMatrix()
     {
         setAdjacencyMatrix(new
@@ -33,6 +38,24 @@ public class DigraphMatrix extends AbstractGraph
                 setEdge(i, j, null);
             }
         }
+    }
+
+    private void expandAdjacencyMatrix()
+    {
+        Edge[][] newAdjacencyMatrix = new Edge[getNumberOfVertices()+1][getNumberOfVertices()+1];
+
+        for (int i = 0; i < getNumberOfVertices(); i++) {
+            for (int j = 0; j < getNumberOfVertices(); j++) {
+                newAdjacencyMatrix[i][j] = getAdjacencyMatrix()[i][j];
+            }
+        }
+
+        for (int i = 0; i <= getNumberOfVertices(); i++) {
+            newAdjacencyMatrix[i][getNumberOfVertices()] = null;
+            newAdjacencyMatrix[getNumberOfVertices()][i] = null;
+        }
+
+        setAdjacencyMatrix(newAdjacencyMatrix);
     }
 
     public void addEdge(Vertex source, Vertex destination, float value)
@@ -49,7 +72,8 @@ public class DigraphMatrix extends AbstractGraph
 
     @Override
     public void addVertex(Vertex vertex) {
-        throw new UnsupportedOperationException();
+        expandAdjacencyMatrix();
+        super.addVertex(vertex);
     }
 
     @Override
@@ -218,6 +242,7 @@ public class DigraphMatrix extends AbstractGraph
     protected DigraphMatrix clone() throws CloneNotSupportedException
     {
         DigraphMatrix cloneGraph = (DigraphMatrix) super.clone();
+        cloneGraph.setAdjacencyMatrix(new Edge[getNumberOfVertices()][getNumberOfVertices()]);
         cloneGraph.cloneAdjacencyMatrix(this);
         return cloneGraph;
     }

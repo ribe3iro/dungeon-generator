@@ -9,6 +9,10 @@ public class GraphMatrix extends DigraphMatrix
         super(vertices);
     }
 
+    public GraphMatrix() {
+        super();
+    }
+
     @Override
     public void addEdge(Vertex source, Vertex destination, float value)
     {

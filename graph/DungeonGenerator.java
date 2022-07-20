@@ -20,7 +20,7 @@ public class DungeonGenerator {
     }
 
     private void createGraphWithRooms(int nRooms) {
-        dungeon = new GraphList();
+        dungeon = new GraphMatrix();
 
         for (int i = 0; i < nRooms; i++) {
             boolean roomIsValid;

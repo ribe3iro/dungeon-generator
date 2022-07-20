@@ -1,4 +1,4 @@
-MAIN = Main
+MAIN = DungeonController
 JARS = ./jars/*
 PACKAGE = graph
 

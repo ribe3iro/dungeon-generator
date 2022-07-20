@@ -82,7 +82,7 @@ public class Room extends Vertex {
 
     @Override
     public String toString() {
-        return "Room{" + "(X, Y)= ("+ room.getX() + "," + room.getY() + ")}";
+        return "Room{" + "(X, Y)= ("+ room.getX() + ", " + room.getY() + ")}";
     }
 
 }

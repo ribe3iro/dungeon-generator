@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 public abstract class TraversalStrategy
 {
-    private static final Logger LOGGER = Logger.getLogger("TravestalStrategyInterface.class");
+    private static final Logger LOGGER = Logger.getLogger("TraversalStrategyInterface.class");
     private AbstractGraph graph;
     private boolean[] visitedVertices;
     private float[] distanceToVertices;

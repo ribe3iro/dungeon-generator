@@ -18,7 +18,7 @@ public class PrimMSTTraversal extends TraversalStrategy {
         setDistanceToVertex(sourceIndex, 0);
         setPredecessorVertexIndex(sourceIndex, -1);
         visitAllVertices();
-        printVisitTree();
+        // printVisitTree();
     }
 
     private void visitAllVertices() {

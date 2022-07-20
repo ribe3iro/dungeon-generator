@@ -16,11 +16,23 @@ public class DungeonController {
         DungeonController dungeonController = new DungeonController();
         createRandomDungeon(dungeonController);
         DelaunayTriangulation.triangulateGraphVertices(dungeonController.dungeon);
-        // ReplaceDungeonWithMST(dungeonController);
-        setSpecialRooms(dungeonController);
-        List<Vertex> traversalPath = null; // getPathFromEntranceToExit(dungeonController);
-        setLocksAndKeys(dungeonController);
-        SwingUtilities.invokeLater(() -> new DungeonGraphic(dungeonController.dungeon, traversalPath).setVisible(true));
+        ReplaceDungeonWithMST(dungeonController);
+        printDungeonPath(dungeonController);
+
+        ((Room)dungeonController.dungeon.getVertices().get(0)).setEntrance(true);
+
+        // setSpecialRooms(dungeonController);
+        // setLocksAndKeys(dungeonController);
+        // List<Vertex> traversalPath = getPathFromEntranceToExit(dungeonController);
+        SwingUtilities.invokeLater(() -> new DungeonGraphic(dungeonController.dungeon, null).setVisible(true));
+    }
+
+    private static void printDungeonPath(DungeonController dungeonController) {
+        AbstractGraph dungeon = dungeonController.dungeon;
+        TraversalStrategy traversalStrategy;
+        traversalStrategy = new BreadthFirstTraversal(dungeon);
+        Vertex source = dungeon.getVertices().get(0);
+        traversalStrategy.traverseGraph(source);
     }
 
     private static void setLocksAndKeys(DungeonController dungeonController) {
@@ -39,15 +51,14 @@ public class DungeonController {
         dungeonController.dungeon = randomDungeonGenerator.getDungeon();
     }
 
-    // private static void ReplaceDungeonWithMST(DungeonController
-    // dungeonController) {
-    // AbstractGraph dungeon = dungeonController.dungeon;
-    // TraversalStrategy traversalStrategy;
-    // traversalStrategy = new PrimMSTTraversal(dungeon);
-    // traversalStrategy.traverseGraph(dungeon.getVertices().get(0));
-    // dungeonController.dungeon = GraphConverter.predecessorListToGraph(dungeon,
-    // traversalStrategy.getPredecessorArray());
-    // }
+    private static void ReplaceDungeonWithMST(DungeonController dungeonController) {
+        AbstractGraph dungeon = dungeonController.dungeon;
+        TraversalStrategy traversalStrategy;
+        traversalStrategy = new PrimMSTTraversal(dungeon);
+        traversalStrategy.traverseGraph(dungeon.getVertices().get(0));
+        dungeonController.dungeon = GraphConverter.predecessorListToGraph(dungeon,
+                traversalStrategy.getPredecessorArray());
+    }
 
     private static void setSpecialRooms(DungeonController dungeonController) {
         AbstractGraph dungeon = dungeonController.dungeon;
