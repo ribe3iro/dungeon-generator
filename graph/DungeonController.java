@@ -19,7 +19,6 @@ public class DungeonController {
         ReplaceDungeonWithMST(dungeonController);
         printDungeonPath(dungeonController);
 
-        ((Room)dungeonController.dungeon.getVertices().get(0)).setEntrance(true);
 
         // setSpecialRooms(dungeonController);
         // setLocksAndKeys(dungeonController);
