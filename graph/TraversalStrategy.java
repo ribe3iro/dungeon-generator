@@ -100,6 +100,10 @@ public abstract class TraversalStrategy
         LOGGER.info(traversalPathString);
     }
 
+    public List<Vertex> getTraversalPath(){
+        return traversalPath;
+    }
+
     protected void printShortestPath(Vertex source, Vertex destination)
     {
         int sourceIndex = graph.getVertices().indexOf(source);
@@ -146,6 +150,10 @@ public abstract class TraversalStrategy
         }
         var treeString = treeStringBuilder.toString();
         LOGGER.info(treeString);
+    }
+
+    protected void printMessage(String message){
+        LOGGER.info(message);
     }
 
     protected List<Vertex> getShortestPath(Vertex source, Vertex destination)

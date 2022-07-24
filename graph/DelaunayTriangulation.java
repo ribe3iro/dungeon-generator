@@ -4,8 +4,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.awt.geom.Point2D.distance;
-
 public class DelaunayTriangulation {
 
     public static void triangulateGraphVertices(AbstractGraph graph)
@@ -26,20 +24,24 @@ public class DelaunayTriangulation {
                     if(isTriangle && triangleDoesNotOverlap(triangle, triangleList))
                     {
                         float weight;
-                        weight = (float) distance(triangle.getP1().getX(), triangle.getP1().getY(),
+                        weight = (float) manhattanDistance(triangle.getP1().getX(), triangle.getP1().getY(),
                                 triangle.getP2().getX(), triangle.getP2().getY());
-                        graph.addEdge(vertexA, vertexB, (int)weight);
-                        weight = (float) distance(triangle.getP1().getX(), triangle.getP1().getY(),
+                        graph.addEdge(vertexA, vertexB, weight);
+                        weight = (float) manhattanDistance(triangle.getP1().getX(), triangle.getP1().getY(),
                                 triangle.getP3().getX(), triangle.getP3().getY());
-                        graph.addEdge(vertexA, vertexC, (int)weight);
-                        weight = (float) distance(triangle.getP2().getX(), triangle.getP2().getY(),
+                        graph.addEdge(vertexA, vertexC, weight);
+                        weight = (float) manhattanDistance(triangle.getP2().getX(), triangle.getP2().getY(),
                                 triangle.getP3().getX(), triangle.getP3().getY());
-                        graph.addEdge(vertexB, vertexC, (int)weight);
+                        graph.addEdge(vertexB, vertexC, weight);
                         triangleList.add(triangle);
                     }
                 }
             }
         }
+    }
+
+    private static double manhattanDistance(double x1, double y1, double x2, double y2){
+        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
     }
 
     private static boolean triangleDoesNotOverlap(Triangle newTriangle, List<Triangle> existingTriangles)

@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.awt.geom.Point2D.distance;
+
 public class DungeonController {
 
     private AbstractGraph dungeon;
@@ -17,13 +19,11 @@ public class DungeonController {
         createRandomDungeon(dungeonController);
         DelaunayTriangulation.triangulateGraphVertices(dungeonController.dungeon);
         ReplaceDungeonWithMST(dungeonController);
-        printDungeonPath(dungeonController);
-
-
-        // setSpecialRooms(dungeonController);
-        // setLocksAndKeys(dungeonController);
-        // List<Vertex> traversalPath = getPathFromEntranceToExit(dungeonController);
-        SwingUtilities.invokeLater(() -> new DungeonGraphic(dungeonController.dungeon, null).setVisible(true));
+        setSpecialRooms(dungeonController);
+        List<Vertex> traversalPath = getPathFromEntranceToExit(dungeonController);
+        setLocksAndKeys(dungeonController);
+        // printDungeonPath(dungeonController);
+        SwingUtilities.invokeLater(() -> new DungeonGraphic(dungeonController.dungeon, traversalPath).setVisible(true));
     }
 
     private static void printDungeonPath(DungeonController dungeonController) {
@@ -76,12 +76,24 @@ public class DungeonController {
         dungeonController.exit = exit;
     }
 
-    // private static List<Vertex> getPathFromEntranceToExit(DungeonController
-    // dungeonController) {
-    // AbstractGraph dungeon = dungeonController.dungeon;
-    // TraversalStrategy aStar = new AStarPathFind(dungeon);
-    // aStar.traverseGraph(dungeonController.entrance, dungeonController.exit);
-    // return aStar.getShortestPath(dungeonController.entrance,
-    // dungeonController.exit);
-    // }
+    private static List<Vertex> getPathFromEntranceToExit(DungeonController dungeonController) {
+        AbstractGraph dungeon = dungeonController.dungeon;
+
+        int numOfVertices = dungeon.getNumberOfVertices();
+        float[] heuristic = new float[numOfVertices];
+        var p1 = dungeonController.exit.getPoint();
+        for(int i = 0; i < numOfVertices; i++){
+            var p2 = ((Room)dungeon.getVertices().get(i)).getPoint();
+            heuristic[i] = (float)distance(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+            // heuristic[i] *= heuristic[i];
+            // heuristic[i] *= 2;
+        }
+
+        TraversalStrategy traversalStrategy = new AStarPathFind(dungeon, heuristic);
+        //TraversalStrategy traversalStrategy = new DepthFirstTraversal(dungeon);
+        //TraversalStrategy traversalStrategy = new BreadthFirstTraversal(dungeon);
+        traversalStrategy.traverseGraph(dungeonController.entrance, dungeonController.exit);
+        return traversalStrategy.getShortestPath(dungeonController.entrance, dungeonController.exit);
+        //return traversalStrategy.getTraversalPath();
+    }
 }

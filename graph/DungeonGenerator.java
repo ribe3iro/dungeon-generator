@@ -44,7 +44,7 @@ public class DungeonGenerator {
         var width = random.nextInt(10, roomMaxWidth);
         var height = random.nextInt(10, roomMaxHeight);
         var x = random.nextInt(800);
-        var y = random.nextInt(800);
+        var y = random.nextInt(50, 800);
         return new Rectangle(new Point(x, y), new Dimension(width, height));
     }
 }
